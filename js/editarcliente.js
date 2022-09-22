@@ -51,11 +51,17 @@
         objectStore.put(clienteActualizado)
 
         transaction.oncomplete = function () {
-            imprimirAlerta('Editado correctamente')
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Cliente editado correctamente',
+                showConfirmButton: false,
+                timer: 1900
+            })
 
             setTimeout(() => {
                 window.location.href = "index.html"
-            }, 3000)
+            }, 2000)
         }
 
         transaction.onerror = function () {

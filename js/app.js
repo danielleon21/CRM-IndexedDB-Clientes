@@ -18,21 +18,35 @@
         if (e.target.classList.contains('eliminar')) {
             const idEliminar = Number(e.target.dataset.cliente);
 
-            const confirmar = confirm('Deseas eliminar este cliente?')
-            if (confirmar) {
-                const transaction = DB.transaction(['crm'], 'readwrite')
-                const objectStore = transaction.objectStore('crm')
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir los cambios después",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminalo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Eliminado!',
+                        'El cliente fue eliminado correctamente!',
+                        'success'
+                    )
+                    const transaction = DB.transaction(['crm'], 'readwrite')
+                    const objectStore = transaction.objectStore('crm')
 
-                objectStore.delete(idEliminar)
+                    objectStore.delete(idEliminar)
 
-                transaction.oncomplete = function () {
-                    e.target.parentElement.parentElement.remove()
+                    transaction.oncomplete = function () {
+                        e.target.parentElement.parentElement.remove()
+                    }
+
+                    transaction.onerror = function () {
+                        console.log('Hubo un error')
+                    }
                 }
-
-                transaction.onerror = function () {
-                    console.log('Hubo un error')
-                }
-            }
+            })
         }
     }
 

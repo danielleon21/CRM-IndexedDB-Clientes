@@ -5,7 +5,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         // Conectar a la base de datos
-
         conectarDB()
 
         formulario.addEventListener('submit', validarCliente)
@@ -51,12 +50,31 @@
         }
 
         transaction.oncomplete = function () {
-            imprimirAlerta('El Cliente se agrego correctamente')
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Cliente agregado correctamente',
+                showConfirmButton: false,
+                timer: 1900
+            })
         }
 
         setTimeout(() => {
             window.location.href = "index.html"
-        }, 3000);
+        }, 2000);
+    }
+
+    function conectarDB() {
+        const abrirConexion = window.indexedDB.open('crm', 1)
+
+        abrirConexion.onerror = function () {
+            console.log('Hubo un error')
+        }
+
+        abrirConexion.onsuccess = function () {
+            DB = abrirConexion.result
+        }
+
     }
 
 
